@@ -1,0 +1,216 @@
+{
+  "info": {
+    "name": "Restaurant System - MongoDB",
+    "_postman_id": "restaurant-system-collection",
+    "description": "Colección completa para Proyecto MongoDB - 120 puntos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Crear Usuario",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Pérez\",\n  \"correo\": \"juan@mail.com\",\n  \"contrasenaHash\": \"123456\",\n  \"direccion\": \"Zona 1\",\n  \"roles\": [\"cliente\"]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/usuarios",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "Listar Usuarios",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/usuarios",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "Bulk Usuarios",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "http://localhost:8080/usuarios/bulk",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["usuarios", "bulk"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Restaurantes",
+      "item": [
+        {
+          "name": "Crear Restaurante",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Pizza Planet\",\n  \"descripcion\": \"Pizzas artesanales\",\n  \"categorias\": [\"italiana\", \"pizza\"],\n  \"estado\": \"activo\",\n  \"ubicacion\": {\n    \"type\": \"Point\",\n    \"coordinates\": [-90.5133, 14.6349]\n  }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/restaurantes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["restaurantes"]
+            }
+          }
+        },
+        {
+          "name": "Restaurantes Cercanos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/restaurantes/cercanos?lat=14.63&lng=-90.51&dist=5000",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["restaurantes", "cercanos"],
+              "query": [
+                { "key": "lat", "value": "14.63" },
+                { "key": "lng", "value": "-90.51" },
+                { "key": "dist", "value": "5000" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ordenes",
+      "item": [
+        {
+          "name": "Crear Orden",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"pendiente\",\n  \"total\": 120,\n  \"usuario_id\": \"PON_ID_USUARIO\",\n  \"restaurante_id\": \"PON_ID_RESTAURANTE\",\n  \"items\": [\n    {\n      \"articulo_id\": \"PON_ID_ARTICULO\",\n      \"nombre\": \"Pizza Pepperoni\",\n      \"precioUnitario\": 60,\n      \"cantidad\": 2,\n      \"subtotal\": 120\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/ordenes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["ordenes"]
+            }
+          }
+        },
+        {
+          "name": "Listar Ordenes",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/ordenes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["ordenes"]
+            }
+          }
+        },
+        {
+          "name": "Explain Ordenes",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/debug/explain-ordenes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["debug", "explain-ordenes"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reseñas",
+      "item": [
+        {
+          "name": "Crear Reseña",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"calificacion\": 5,\n  \"comentario\": \"Excelente servicio\",\n  \"usuario_id\": \"PON_ID_USUARIO\",\n  \"restaurante_id\": \"PON_ID_RESTAURANTE\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/resenas",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["resenas"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reportes",
+      "item": [
+        {
+          "name": "Restaurantes Mejor Calificados",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/reportes/mejores-restaurantes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["reportes", "mejores-restaurantes"]
+            }
+          }
+        },
+        {
+          "name": "Platillos Mas Vendidos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/reportes/platillos-mas-vendidos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["reportes", "platillos-mas-vendidos"]
+            }
+          }
+        },
+        {
+          "name": "Ventas Por Mes",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/reportes/ventas-por-mes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["reportes", "ventas-por-mes"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
