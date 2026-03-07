@@ -69,33 +69,121 @@ func createIndexes() {
 
 func createValidations() {
 
+	ctx := context.Background()
+
+	// =======================
+	// USUARIOS
+	// =======================
 	usuarioSchema := bson.M{
 		"bsonType": "object",
 		"required": []string{"nombre", "correo"},
 		"properties": bson.M{
-			"nombre": bson.M{
-				"bsonType": "string",
-			},
-			"correo": bson.M{
-				"bsonType": "string",
-			},
+			"nombre": bson.M{"bsonType": "string"},
+			"correo": bson.M{"bsonType": "string"},
 			"roles": bson.M{
 				"bsonType": "array",
-				"items": bson.M{
-					"bsonType": "string",
+				"items":    bson.M{"bsonType": "string"},
+			},
+		},
+	}
+
+	createCollectionWithValidation("usuarios", usuarioSchema, ctx)
+
+	// =======================
+	// RESTAURANTES
+	// =======================
+	restauranteSchema := bson.M{
+		"bsonType": "object",
+		"required": []string{"nombre", "estado", "ubicacion"},
+		"properties": bson.M{
+			"nombre": bson.M{"bsonType": "string"},
+			"estado": bson.M{"bsonType": "string"},
+			"categorias": bson.M{
+				"bsonType": "array",
+				"items":    bson.M{"bsonType": "string"},
+			},
+			"ubicacion": bson.M{
+				"bsonType": "object",
+				"required": []string{"type", "coordinates"},
+				"properties": bson.M{
+					"type": bson.M{"enum": []string{"Point"}},
+					"coordinates": bson.M{
+						"bsonType": "array",
+						"items":    bson.M{"bsonType": "double"},
+					},
 				},
 			},
 		},
 	}
 
-	command := bson.D{
-		{"collMod", "usuarios"},
-		{"validator", bson.M{"$jsonSchema": usuarioSchema}},
-		{"validationLevel", "strict"},
+	createCollectionWithValidation("restaurantes", restauranteSchema, ctx)
+
+	// =======================
+	// ARTICULOS
+	// =======================
+	articuloSchema := bson.M{
+		"bsonType": "object",
+		"required": []string{"nombre", "precio", "restaurante_id"},
+		"properties": bson.M{
+			"nombre": bson.M{"bsonType": "string"},
+			"precio": bson.M{"bsonType": "double"},
+			"restaurante_id": bson.M{
+				"bsonType": "objectId",
+			},
+		},
 	}
 
-	err := DB.RunCommand(context.Background(), command).Err()
+	createCollectionWithValidation("articulosMenu", articuloSchema, ctx)
+
+	// =======================
+	// ORDENES
+	// =======================
+	ordenSchema := bson.M{
+		"bsonType": "object",
+		"required": []string{"usuario_id", "restaurante_id", "estado", "items"},
+		"properties": bson.M{
+			"usuario_id": bson.M{"bsonType": "objectId"},
+			"restaurante_id": bson.M{"bsonType": "objectId"},
+			"estado": bson.M{
+				"enum": []string{"pendiente", "procesando", "cancelado", "completado"},
+			},
+			"items": bson.M{
+				"bsonType": "array",
+			},
+		},
+	}
+
+	createCollectionWithValidation("ordenes", ordenSchema, ctx)
+
+	// =======================
+	// RESEÑAS
+	// =======================
+	resenaSchema := bson.M{
+		"bsonType": "object",
+		"required": []string{"calificacion", "usuario_id", "restaurante_id"},
+		"properties": bson.M{
+			"calificacion": bson.M{
+				"bsonType": "int",
+				"minimum":  1,
+				"maximum":  5,
+			},
+			"usuario_id": bson.M{"bsonType": "objectId"},
+			"restaurante_id": bson.M{"bsonType": "objectId"},
+		},
+	}
+
+	createCollectionWithValidation("resenas", resenaSchema, ctx)
+}
+
+func createCollectionWithValidation(name string, schema bson.M, ctx context.Context) {
+
+	opts := options.CreateCollection().
+		SetValidator(bson.M{"$jsonSchema": schema}).
+		SetValidationLevel("strict")
+
+	err := DB.CreateCollection(ctx, name, opts)
+
 	if err != nil {
-		log.Println("⚠ Validación no aplicada (puede que la colección no exista aún)")
+		log.Println(name, "ya existe o error:", err)
 	}
 }
