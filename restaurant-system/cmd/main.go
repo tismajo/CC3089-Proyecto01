@@ -1,17 +1,33 @@
 package main
 
 import (
+	//"fmt"
 	"restaurant-system/config"
 	"restaurant-system/handlers"
+	//"restaurant-system/seed"
 
-	"github.com/gin-gonic/gin"
-	"github.com/gin-contrib/cors"
 	"time"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
 
 	config.ConnectDatabase()
+
+	/*err := seed.SeedBaseData()
+	if err != nil {
+		panic(err)
+	}
+
+	err = seed.SeedOrdenes(50000)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Seed completo terminado")
+*/
 
 	r := gin.Default()
 
