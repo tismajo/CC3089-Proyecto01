@@ -26,9 +26,9 @@ func ConnectDatabase() {
 
 	Client = client
 	DB = client.Database("restaurant_system")
-
-	createIndexes()
+	
 	createValidations()
+	createIndexes()
 
 	log.Println("✅ Conectado a MongoDB")
 }

@@ -72,7 +72,7 @@ func SeedBaseData() error {
 			articulos = append(articulos, bson.M{
 				"nombre":         fmt.Sprintf("Producto %d", j),
 				"descripcion":    "Producto demo",
-				"precio":         rand.Intn(100) + 20,
+				"precio": float64(rand.Intn(100) + 20),
 				"categoria":      "general",
 				"disponible":     true,
 				"restaurante_id": restID,
