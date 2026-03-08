@@ -4,6 +4,7 @@ import (
 	//"fmt"
 	"restaurant-system/config"
 	"restaurant-system/handlers"
+
 	//"restaurant-system/seed"
 
 	"time"
@@ -60,8 +61,17 @@ func main() {
 	r.GET("/reportes/mejores-restaurantes", handlers.RestaurantesMejorCalificados)
 	r.GET("/reportes/ventas-por-mes", handlers.VentasPorMes)
 	r.GET("/reportes/platillos-mas-vendidos", handlers.PlatillosMasVendidos)
-
+	r.POST("/upload", handlers.UploadMenu)	
+	r.GET("/download/:filename", handlers.DownloadFile)
 	r.GET("/debug/explain-ordenes", handlers.ExplainOrdenes)
-
+	// ARTICULOS
+	r.POST("/articulos", handlers.CreateArticulo)
+	r.GET("/articulos", handlers.GetArticulos)
+	r.GET("/articulos/restaurante/:id", handlers.GetArticulosByRestaurante)
+	r.PUT("/articulos/:id", handlers.UpdateArticulo)
+	r.DELETE("/articulos/:id", handlers.DeleteArticulo)
+	r.DELETE("/articulos", handlers.DeleteManyArticulos)
+	r.GET("/articulos/count", handlers.CountArticulos)
+	r.GET("/articulos/distinct-categorias", handlers.DistinctCategorias)
 	r.Run(":8080")
 }

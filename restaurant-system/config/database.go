@@ -47,7 +47,11 @@ func createIndexes() {
 		mongo.IndexModel{
 			Keys: bson.D{{"usuario_id", 1}, {"fecha", -1}},
 		})
-
+	// Índice para estado (necesario para explain)
+	DB.Collection("ordenes").Indexes().CreateOne(context.Background(),
+	mongo.IndexModel{
+		Keys: bson.D{{"estado", 1}},
+	})
 	// Índice multikey
 	DB.Collection("restaurantes").Indexes().CreateOne(context.Background(),
 		mongo.IndexModel{
