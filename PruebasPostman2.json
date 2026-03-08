@@ -1,0 +1,203 @@
+{
+  "info": {
+    "name": "Restaurant System - MongoDB FINAL 120pts",
+    "_postman_id": "restaurant-system-final",
+    "description": "Colección completa con todas las pruebas: CRUD, agregaciones, explain, gridfs, count, distinct",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+
+    {
+      "name": "1 - Usuarios",
+      "item": [
+        {
+          "name": "Crear Usuario",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Pérez\",\n  \"correo\": \"juan@mail.com\",\n  \"contrasenaHash\": \"123456\",\n  \"direccion\": \"Zona 1\",\n  \"roles\": [\"cliente\"]\n}"
+            },
+            "url": { "raw": "http://localhost:8080/usuarios" }
+          }
+        },
+        {
+          "name": "Listar Usuarios",
+          "request": { "method": "GET", "url": { "raw": "http://localhost:8080/usuarios" } }
+        },
+        {
+          "name": "Bulk Usuarios",
+          "request": { "method": "POST", "url": { "raw": "http://localhost:8080/usuarios/bulk" } }
+        }
+      ]
+    },
+
+    {
+      "name": "2 - Restaurantes",
+      "item": [
+        {
+          "name": "Crear Restaurante",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Pizza Planet\",\n  \"descripcion\": \"Pizzas artesanales\",\n  \"categorias\": [\"italiana\", \"pizza\"],\n  \"estado\": \"activo\",\n  \"ubicacion\": { \"type\": \"Point\", \"coordinates\": [-90.5133, 14.6349] }\n}"
+            },
+            "url": { "raw": "http://localhost:8080/restaurantes" }
+          }
+        },
+        {
+          "name": "Listar Restaurantes",
+          "request": { "method": "GET", "url": { "raw": "http://localhost:8080/restaurantes" } }
+        },
+        {
+          "name": "Restaurantes Cercanos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/restaurantes/cercanos?lat=14.63&lng=-90.51&dist=5000"
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "3 - Articulos",
+      "item": [
+        {
+          "name": "Crear Articulo",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Pizza Pepperoni\",\n  \"descripcion\": \"Grande\",\n  \"precio\": 60,\n  \"categoria\": \"pizza\",\n  \"disponible\": true,\n  \"restaurante_id\": \"PON_ID_RESTAURANTE\"\n}"
+            },
+            "url": { "raw": "http://localhost:8080/articulos" }
+          }
+        },
+        {
+          "name": "Listar Articulos",
+          "request": { "method": "GET", "url": { "raw": "http://localhost:8080/articulos" } }
+        },
+        {
+          "name": "Actualizar Articulo",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{ \"precio\": 75 }" },
+            "url": { "raw": "http://localhost:8080/articulos/PON_ID_ARTICULO" }
+          }
+        },
+        {
+          "name": "Eliminar Articulo",
+          "request": { "method": "DELETE", "url": { "raw": "http://localhost:8080/articulos/PON_ID_ARTICULO" } }
+        },
+        {
+          "name": "Count Articulos",
+          "request": { "method": "GET", "url": { "raw": "http://localhost:8080/articulos/count" } }
+        },
+        {
+          "name": "Distinct Categorias",
+          "request": { "method": "GET", "url": { "raw": "http://localhost:8080/articulos/distinct-categorias" } }
+        }
+      ]
+    },
+
+    {
+      "name": "4 - Ordenes",
+      "item": [
+        {
+          "name": "Crear Orden (Transacción)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"pendiente\",\n  \"total\": 120,\n  \"usuario_id\": \"PON_ID_USUARIO\",\n  \"restaurante_id\": \"PON_ID_RESTAURANTE\",\n  \"items\": [\n    {\"articulo_id\": \"PON_ID_ARTICULO\",\"nombre\": \"Pizza Pepperoni\",\"precioUnitario\": 60,\"cantidad\": 2,\"subtotal\": 120}\n  ]\n}"
+            },
+            "url": { "raw": "http://localhost:8080/ordenes" }
+          }
+        },
+        {
+          "name": "Listar Ordenes",
+          "request": { "method": "GET", "url": { "raw": "http://localhost:8080/ordenes" } }
+        },
+        {
+          "name": "Cancelar Orden",
+          "request": { "method": "PUT", "url": { "raw": "http://localhost:8080/ordenes/PON_ID_ORDEN/cancelar" } }
+        },
+        {
+          "name": "Eliminar Orden",
+          "request": { "method": "DELETE", "url": { "raw": "http://localhost:8080/ordenes/PON_ID_ORDEN" } }
+        }
+      ]
+    },
+
+    {
+      "name": "5 - Reseñas",
+      "item": [
+        {
+          "name": "Crear Reseña",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"calificacion\": 5, \"comentario\": \"Excelente servicio\", \"usuario_id\": \"PON_ID_USUARIO\", \"restaurante_id\": \"PON_ID_RESTAURANTE\" }"
+            },
+            "url": { "raw": "http://localhost:8080/resenas" }
+          }
+        },
+        {
+          "name": "Listar Reseñas",
+          "request": { "method": "GET", "url": { "raw": "http://localhost:8080/resenas" } }
+        }
+      ]
+    },
+
+    {
+      "name": "6 - Reportes",
+      "item": [
+        { "name": "Mejores Restaurantes", "request": { "method": "GET", "url": { "raw": "http://localhost:8080/reportes/mejores-restaurantes" } } },
+        { "name": "Platillos Mas Vendidos", "request": { "method": "GET", "url": { "raw": "http://localhost:8080/reportes/platillos-mas-vendidos" } } },
+        { "name": "Ventas Por Mes", "request": { "method": "GET", "url": { "raw": "http://localhost:8080/reportes/ventas-por-mes" } } }
+      ]
+    },
+
+    {
+      "name": "7 - GridFS",
+      "item": [
+        {
+          "name": "Upload Archivo",
+          "request": {
+            "method": "POST",
+            "body": { "mode": "formdata", "formdata": [{ "key": "file", "type": "file", "src": "" }] },
+            "url": { "raw": "http://localhost:8080/upload" }
+          }
+        },
+        {
+          "name": "Download Archivo",
+          "request": { "method": "GET", "url": { "raw": "http://localhost:8080/download/PON_NOMBRE_ARCHIVO" } }
+        }
+      ]
+    },
+
+    {
+      "name": "8 - Explain",
+      "item": [
+        {
+          "name": "Explain Ordenes (Ver IXSCAN)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "http://localhost:8080/debug/explain-ordenes" }
+          }
+        }
+      ]
+    }
+
+  ]
+}
