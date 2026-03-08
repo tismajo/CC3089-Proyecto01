@@ -73,5 +73,6 @@ func main() {
 	r.DELETE("/articulos", handlers.DeleteManyArticulos)
 	r.GET("/articulos/count", handlers.CountArticulos)
 	r.GET("/articulos/distinct-categorias", handlers.DistinctCategorias)
+	r.POST("/usuarios/bulk-mixto", handlers.BulkMixto)
 	r.Run(":8080")
 }

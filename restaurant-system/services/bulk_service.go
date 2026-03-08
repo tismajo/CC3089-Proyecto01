@@ -8,6 +8,8 @@ import (
 	"restaurant-system/config"
 	"restaurant-system/models"
 
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func BulkInsertUsuarios() error {
@@ -31,6 +33,60 @@ func BulkInsertUsuarios() error {
 
 	_, err := config.DB.Collection("usuarios").
 		InsertMany(context.Background(), usuarios)
+
+	return err
+}
+
+func BulkOperacionMixta() error {
+
+	ctx := context.Background()
+
+	var modelsWrite []mongo.WriteModel
+
+	// ======================
+	// INSERT
+	// ======================
+	for i := 1; i <= 2; i++ {
+
+		usuario := models.Usuario{
+			Nombre:         fmt.Sprintf("MixUser%d", i),
+			Correo:         fmt.Sprintf("mix%d_%d@mail.com", i, time.Now().UnixNano()),
+			ContrasenaHash: "123456",
+			Direccion:      "Zona Bulk",
+			Roles:          []string{"cliente"},
+			FechaRegistro:  time.Now(),
+		}
+
+		insertModel := mongo.NewInsertOneModel().
+			SetDocument(usuario)
+
+		modelsWrite = append(modelsWrite, insertModel)
+	}
+
+	// ======================
+	// UPDATE MANY
+	// ======================
+	updateModel := mongo.NewUpdateManyModel().
+		SetFilter(bson.M{"roles": "cliente"}).
+		SetUpdate(bson.M{
+			"$set": bson.M{"direccion": "Actualizado por Bulk"},
+		})
+
+	modelsWrite = append(modelsWrite, updateModel)
+
+	// ======================
+	// DELETE ONE
+	// ======================
+	deleteModel := mongo.NewDeleteOneModel().
+		SetFilter(bson.M{"nombre": "Usuario 0"})
+
+	modelsWrite = append(modelsWrite, deleteModel)
+
+	// ======================
+	// EJECUTAR BULK
+	// ======================
+	_, err := config.DB.Collection("usuarios").
+		BulkWrite(ctx, modelsWrite)
 
 	return err
 }
